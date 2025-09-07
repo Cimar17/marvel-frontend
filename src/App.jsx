@@ -11,8 +11,8 @@ import Characters from "./pages/Characters";
 import CharacterComics from "./pages/CharacterComics";
 import AllComics from "./pages/AllComics";
 import Favorites from "./pages/Favorites";
-import Signup from "./pages/Signup";
-import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import LogIn from "./pages/LogIn";
 import THEMES from "./themes"; // 🎨 Thèmes (Rocket, Iron Man, Panther)
 
 export default function App() {
@@ -91,8 +91,8 @@ export default function App() {
           {/* Favoris */}
           <Route path="/favorites" element={<Favorites />} />
           {/* Authentification */}
-          <Route path="/signup" element={<Signup setUser={setUser} />} />
-          <Route path="/login" element={<Login setUser={setUser} />} />
+          <Route path="/signup" element={<SignUp setUser={setUser} />} />
+          <Route path="/login" element={<LogIn setUser={setUser} />} />
         </Routes>
 
         {/* 💡 Effet lumineux qui suit la souris */}
