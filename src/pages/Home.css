@@ -1,0 +1,171 @@
+/**************************************************
+ * HOME — HERO + BOUTONS + SCROLL
+ **************************************************/
+
+/* ===================== HERO (bannière) ===================== */
+.hero {
+  position: relative; /* 📍 permet de placer les ::before/::after à l’intérieur */
+  display: flex; /* 🎛️ pour organiser le contenu en flexbox */
+  align-items: center; /* ↕️ centre verticalement le texte */
+  min-height: 100vh; /* ⬆️ occupe toute la hauteur de l’écran */
+  overflow: hidden; /* 🚫 cache ce qui dépasse */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06); /* fine bordure en bas */
+  background-position: center right; /* 📸 place l’image de fond */
+  background-size: cover; /* 🔎 l’image couvre toute la zone */
+}
+
+/* ===================== ARRIÈRE-PLAN DU HERO ===================== */
+/* Copie de l’image pour éviter les bugs + voile graduel foncé */
+.hero::before {
+  content: ""; /* 🎭 pseudo-élément vide */
+  position: absolute;
+  inset: 0; /* 🟦 occupe toute la zone */
+  background: inherit; /* 🪞 copie l’image de fond */
+  background-size: cover;
+  background-position: center right;
+  z-index: 0; /* derrière le contenu */
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(10, 14, 24, 0.85) 0%,
+    /* 🌑 très foncé à gauche */ rgba(10, 14, 24, 0.55) 35%,
+    /* 🔅 un peu plus clair */ rgba(10, 14, 24, 0.15) 65%,
+    /* 🌫️ transparent */ rgba(10, 14, 24, 0) 100%
+      /* 🌌 totalement transparent à droite */
+  );
+  z-index: 1; /* couche au-dessus du ::before mais derrière le texte */
+}
+
+/* Variante spéciale si le thème est Iron Man (dégradé plus léger) */
+.app[data-theme="ironman"] .hero::after {
+  background: linear-gradient(
+    to right,
+    rgba(10, 14, 24, 0.7) 0%,
+    rgba(10, 14, 24, 0.4) 28%,
+    rgba(10, 14, 24, 0.1) 58%,
+    rgba(10, 14, 24, 0) 100%
+  );
+}
+
+/* ===================== CONTENU DU HERO ===================== */
+.hero-content {
+  position: relative; /* ✅ passe au-dessus des ::before/::after */
+  z-index: 2; /* 🏔️ au-dessus du voile */
+  display: flex;
+  flex-direction: column; /* ⬇️ empile les éléments (titre, texte, boutons) */
+  gap: 16px; /* ↔️ espace vertical entre eux */
+  padding: 64px 24px; /* marges intérieures */
+  max-width: 720px; /* limite la largeur du bloc texte */
+}
+
+/* ===================== TITRES ===================== */
+.hero-title {
+  font-size: clamp(32px, 6vw, 64px); /* 🔠 taille fluide selon écran */
+  font-weight: 800; /* épais */
+  line-height: 1.05; /* hauteur des lignes */
+  letter-spacing: -0.02em; /* 🔎 lettres un peu resserrées */
+  margin: 0;
+}
+.hero-subtitle {
+  color: var(--muted, #99a3bc); /* 🎨 gris clair par défaut */
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 56ch; /* ✒️ lisible (longueur max de 56 caractères) */
+}
+
+/* ===================== CTA (boutons) ===================== */
+.cta-row {
+  display: flex;
+  gap: 12px; /* ↔️ espace entre boutons */
+  flex-wrap: wrap; /* 📦 passe en ligne suivante si trop serré */
+  margin-top: 8px;
+}
+
+/* ===================== BOUTONS ===================== */
+.btn {
+  padding: 12px 16px; /* espace interne */
+  border-radius: 12px; /* coins arrondis */
+  border: 1px solid transparent; /* contour neutre */
+  font-weight: 600;
+  cursor: pointer; /* 👆 pointeur main */
+  text-decoration: none; /* 🔗 enlève le soulignement si <Link> */
+  display: inline-flex; /* permet centrage horizontal/vertical */
+  align-items: center;
+  justify-content: center;
+}
+
+/* 🎨 Bouton plein dégradé */
+.btn-gradient {
+  color: #fff;
+  border: none;
+  background: linear-gradient(
+    90deg,
+    var(--g1, #7b61ff) 0%,
+    /* violet par défaut */ var(--g2, #14d1ff) 100% /* bleu par défaut */
+  );
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25); /* ombre */
+  background-size: 200% 100%; /* 🔄 animation gradient */
+  background-position: 0 0;
+  transition: background-position 0.4s ease, filter 0.2s ease;
+}
+.btn-gradient:hover {
+  background-position: 100% 0; /* 🌈 déplace le gradient */
+  filter: brightness(1.08); /* 💡 léger éclaircissement */
+}
+
+/* 🎨 Bouton contour dégradé animé */
+.btn-outline {
+  position: relative;
+  border: 2px solid transparent; /* contour initial transparent */
+  color: var(--g2, #14d1ff); /* texte bleu */
+  background: linear-gradient(var(--bg, #0a0e18), var(--bg, #0a0e18))
+      padding-box,
+    /* fond uni (noir cosmos) */
+      linear-gradient(90deg, var(--g1, #7b61ff), var(--g2, #14d1ff)) border-box;
+  border-radius: 12px;
+  transition: color 0.2s ease, background-position 0.4s ease;
+  background-size: 200% 100%, 200% 100%;
+  background-position: 0 0, 0 0;
+}
+.btn-outline:hover {
+  color: #061018; /* texte devient foncé */
+  background: linear-gradient(90deg, var(--g1, #7b61ff), var(--g2, #14d1ff))
+      padding-box,
+    linear-gradient(90deg, var(--g1, #7b61ff), var(--g2, #14d1ff)) border-box;
+  background-position: 100% 0, 100% 0; /* effet de glissement */
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 960px) {
+  .hero {
+    min-height: 68vh; /* 📱 un peu moins haut */
+    background-position: 65% center; /* recadre l’image */
+  }
+}
+@media (max-width: 640px) {
+  .hero {
+    min-height: 64vh;
+    background-position: 60% center;
+  }
+  .hero-content {
+    padding: 48px 16px; /* 📱 réduit les marges */
+  }
+}
+
+/* ===================== ACCESSIBILITÉ ===================== */
+/* 🌍 Si l’utilisateur a activé "réduire les animations" dans son système
+   → on désactive les effets lumineux et animations pour éviter l’inconfort.
+    */
+@media (prefers-reduced-motion: reduce) {
+  .hero-title {
+    text-shadow: none !important; /* 🚫 pas d’effet lumineux */
+  }
+  .scroll-indicator .scroll-core {
+    animation: none !important; /* 🚫 animations désactivées */
+  }
+}

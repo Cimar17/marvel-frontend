@@ -1,0 +1,127 @@
+/* =====================================================================================================================
+   🟪 AUTH PAGES (Signup / Login)
+   - Mise en page centrée (carte au milieu de l’écran)
+   - Look “verre dépoli” cohérent avec le thème (backdrop-blur + opacité)
+   - Champs focus avec glow couleur d’accent (--accent)
+   - Bouton principal avec glow doux (lisible sur tous les thèmes)
+   - Petits liens pour basculer Login/Signup
+   ===================================================================================================================== */
+
+/* ===================== WRAPPER DE PAGE =====================
+   Centre verticalement/ horizontalement le bloc d’auth
+   et réserve la place du header (min-height = 100vh - header) */
+.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px); /* 🧮 80px ≃ hauteur du header */
+  padding: 40px 16px;
+  background: transparent; /* se fond avec le background global */
+}
+
+/* ===================== CARTE (CONTAINER) =====================
+   “Verre dépoli” : fond sombre semi-transparent + blur.
+   Largeur limitée pour garder un formulaire lisible. */
+.auth-container {
+  background: rgba(18, 24, 41, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 420px; /* 🔒 confort de lecture */
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+}
+
+/* ===================== TITRE ===================== */
+.auth-title {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--text);
+}
+
+/* ===================== FORMULAIRE =====================
+   Empile les champs avec un espacement régulier. */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Label au-dessus de l’input pour une meilleure accessibilité
+   + taille de police douce pour l’indication. */
+.auth-label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--muted);
+  gap: 6px;
+}
+
+/* Champs : fond légèrement translucide, bord discret.
+   Focus = bord + glow avec la couleur d’accent (thème). */
+.auth-input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font-size: 0.95rem;
+  outline: none; /* on gère le focus visuel nous-mêmes */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+}
+
+/* ===================== BOUTON SUBMIT =====================
+   Style bouton principal : contour accent + glow doux.
+   Accessible (bonne taille + contraste). */
+.auth-submit {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  color: #fff;
+  border: 1px solid var(--accent);
+  background: transparent; /* laisse voir le fond “verre” */
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 6px var(--accent), 0 0 14px rgba(20, 209, 255, 0.4);
+}
+
+.auth-submit:hover {
+  background: rgba(20, 209, 255, 0.1);
+  box-shadow: 0 0 10px var(--accent), 0 0 24px rgba(20, 209, 255, 0.6);
+}
+
+/* Désactivé pendant l’envoi : feedback visuel + curseur bloqué */
+.auth-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===================== SWITCH LOGIN / SIGNUP =====================
+   Petit texte sous le formulaire avec un lien accentué. */
+.auth-switch {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.auth-switch .link-accent {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-switch .link-accent:hover {
+  text-decoration: underline;
+}

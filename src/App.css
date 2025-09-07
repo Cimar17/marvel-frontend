@@ -1,0 +1,119 @@
+/* ===================================================================
+   🎨 PALETTE & RESET GLOBAL
+   =================================================================== */
+
+:root {
+  --bg: #0a0e18; /* fond principal */
+  --surface: #121829; /* panneaux / surfaces */
+  --text: #eaf0ff; /* texte principal */
+  --muted: #99a3bc; /* texte secondaire */
+  --accent: #14d1ff; /* couleur d’accent (thème) */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ===================================================================
+   🧱 LAYOUT GLOBAL (wrapper app)
+   =================================================================== */
+
+.app {
+  display: flex; /* header + contenu + footer en colonne */
+  flex-direction: column;
+  min-height: 100dvh; /* assure un footer en bas */
+}
+
+/* (optionnel) Conteneur de page pour des marges latérales cohérentes */
+.page {
+  width: min(1400px, 100%);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+/* ===================================================================
+   🎚️ THÈMES — variables globales consommées par Home.css
+   (Home.css utilise --g1 et --g2 pour ses dégradés & effets)
+   =================================================================== */
+
+.app[data-theme="rocket"] {
+  --g1: #7b61ff;
+  --g2: #14d1ff;
+}
+.app[data-theme="ironman"] {
+  --g1: #b71c1c;
+  --g2: #ffd700;
+}
+.app[data-theme="panther"] {
+  --g1: #3a2a78;
+  --g2: #7b61ff;
+}
+
+/* =====================================================================================================================
+   🟪 CURSEUR GLOW (effet décoratif)
+   ===================================================================================================================== */
+
+.cursor-glow {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  margin-left: -14px;
+  margin-top: -14px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(-100px, -100px, 0);
+  transition: opacity 0.2s ease;
+  z-index: 50;
+  mix-blend-mode: screen;
+}
+
+/* Curseur par thème */
+.app[data-theme="rocket"] .cursor-glow {
+  opacity: 0.9;
+  background: radial-gradient(
+    35% 35% at 50% 50%,
+    rgba(123, 97, 255, 0.95) 0%,
+    rgba(20, 209, 255, 0.55) 60%,
+    rgba(123, 97, 255, 0.25) 100%
+  );
+  box-shadow: 0 0 22px rgba(20, 209, 255, 0.6),
+    0 0 38px rgba(123, 97, 255, 0.45);
+}
+.app[data-theme="ironman"] .cursor-glow {
+  opacity: 0.9;
+  background: radial-gradient(
+    35% 35% at 50% 50%,
+    rgba(183, 28, 28, 0.95) 0%,
+    rgba(255, 215, 0, 0.55) 60%,
+    rgba(183, 28, 28, 0.25) 100%
+  );
+  box-shadow: 0 0 22px rgba(183, 28, 28, 0.6), 0 0 38px rgba(255, 215, 0, 0.45);
+}
+.app[data-theme="panther"] .cursor-glow {
+  opacity: 0.9;
+  background: radial-gradient(
+    35% 35% at 50% 50%,
+    rgba(123, 97, 255, 0.95) 0%,
+    rgba(123, 97, 255, 0.35) 60%,
+    rgba(123, 97, 255, 0) 100%
+  );
+  box-shadow: 0 0 22px rgba(123, 97, 255, 0.65),
+    0 0 40px rgba(58, 42, 120, 0.45);
+}

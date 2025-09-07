@@ -1,0 +1,447 @@
+/* =======================================================================================
+   Characters.css
+   LISTE DES PERSONNAGES — UI/UX
+   - Section + titre + barre de recherche (glow selon thème)
+   - Grille de cartes compactes (image, titre, étoile favoris)
+   - Desktop  : overlay d’aperçu (titre + favoris + description + CTA) AU SURVOL
+   - Mobile   : badge “i” qui ouvre une MODALE avec la description + CTA
+   - Boutons (search, pagination) avec glow doux et états accessibles
+   ======================================================================================= */
+
+/* =============================================================================
+   🧭 SECTION + EN-TÊTE
+   ============================================================================= */
+.cards-section {
+  padding: 24px;
+}
+
+/* Titre + barre de recherche */
+.cards-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+/* =============================================================================
+   🔎 BARRE DE RECHERCHE (glow par thème via --accent)
+   ============================================================================= */
+.search-bar {
+  display: flex;
+  gap: 8px;
+}
+
+.search-bar input {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text, #eaf0ff);
+  font-size: 0.9rem;
+}
+
+.search-bar input::placeholder {
+  color: color-mix(in oklab, var(--text, #eaf0ff) 50%, transparent);
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--accent);
+  /* glow “Rocket-like” par défaut (la couleur vient de --accent) */
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 35%, transparent);
+}
+
+/* Bouton principal de la barre de recherche (glow permanent léger) */
+.btn-primary {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: #fff; /* texte toujours blanc */
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+  /* ✨ Glow léger par défaut (au repos) */
+  box-shadow: 0 0 6px var(--accent),
+    0 0 12px color-mix(in oklab, var(--accent) 35%, transparent);
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  background: color-mix(in oklab, var(--accent) 12%, transparent);
+  /* Glow accentué au hover/focus */
+  box-shadow: 0 0 10px var(--accent),
+    0 0 20px color-mix(in oklab, var(--accent) 45%, transparent);
+  transform: translateY(-1px);
+}
+
+/* =============================================================================
+   🧩 GRILLE DE CARTES
+   ============================================================================= */
+.cards-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* centré */
+  gap: 16px;
+}
+
+/* Carte compacte */
+.card {
+  flex: 1 1 150px; /* min 150px, s’adapte automatiquement */
+  max-width: 200px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s, border-color 0.2s;
+  text-decoration: none; /* pas de soulignement si <Link> englobe l’image */
+  color: inherit;
+  position: relative; /* nécessaire pour l’overlay de survol */
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent, #14d1ff);
+}
+
+/* Vignette */
+.card-thumb {
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: #0c0f17;
+}
+
+.card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Corps compact (titre + étoile) */
+.card-body {
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* ⭐ Étoile favoris — version “icône seule”, plus de bouton */
+.fav-star {
+  display: inline-block;
+  margin-top: 6px;
+
+  /* icône seulement */
+  font-size: 22px; /* un peu plus grande */
+  line-height: 1;
+  color: #8ea0c9;
+  cursor: pointer;
+  user-select: none;
+
+  /* on retire tout ce qui faisait "bouton" */
+  padding: 0;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0;
+
+  transition: transform 0.12s ease, color 0.15s ease, text-shadow 0.15s ease;
+}
+
+.fav-star:hover,
+.fav-star:focus-visible {
+  color: var(--accent, #14d1ff);
+  transform: scale(1.08);
+  outline: none;
+  text-shadow: 0 0 8px
+    color-mix(in oklab, var(--accent, #14d1ff) 45%, transparent);
+}
+
+/* active = jaune simple, sans cadre */
+.fav-star.is-active {
+  color: gold;
+  /*   text-shadow: 0 0 10px rgba(255, 215, 0, 0.35); */
+}
+
+/* =============================================================================
+   🧊 OVERLAY D’APERÇU (DESKTOP) — visible au survol
+   ============================================================================= */
+.character-card .card-hover {
+  position: absolute;
+  inset: 0;
+  display: none; /* on ne l’affiche qu’au hover (desktop) */
+  padding: 10px;
+  background: linear-gradient(
+    to top,
+    rgba(8, 12, 20, 0.92) 0%,
+    rgba(8, 12, 20, 0.75) 55%,
+    rgba(8, 12, 20, 0.4) 100%
+  );
+  color: #eaf0ff;
+}
+
+/* ⛔ Neutralisation du rendu au survol (on force à ne pas s'afficher) */
+.character-card:hover .card-hover {
+  display: none !important;
+}
+
+/* Titre + puce favoris (version compacte) */
+.hover-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.hover-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.fav-chip {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #c8d4ff;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, transform 0.12s;
+}
+
+.fav-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.fav-chip.is-active {
+  color: gold;
+  border-color: rgba(255, 215, 0, 0.8);
+}
+
+/* Description scrollable si longue */
+.hover-desc {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  color: color-mix(in oklab, #eaf0ff 85%, transparent);
+  max-height: 6.5em;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+/* CTA vers la page comics du personnage */
+.hover-cta {
+  align-self: flex-start;
+  margin-top: auto;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent, #14d1ff);
+  border: 1px solid var(--accent, #14d1ff);
+  padding: 6px 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.hover-cta:hover,
+.hover-cta:focus-visible {
+  background: color-mix(in oklab, var(--accent) 12%, transparent);
+  box-shadow: 0 0 8px var(--accent),
+    0 0 16px color-mix(in oklab, var(--accent) 40%, transparent);
+  color: #fff;
+}
+
+/* =============================================================================
+   📱 BADGE “i” (MOBILE) + MODALE
+   - On masque l’overlay au survol sur mobile et on affiche un badge
+   ============================================================================= */
+/* 📌 Rendre le badge "i" toujours visible */
+.info-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(
+    0,
+    0,
+    0,
+    0.45
+  ); /* 👈 fond légèrement plus sombre pour contraster */
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  line-height: 20px;
+  text-align: center;
+  cursor: pointer;
+
+  /* ✨ Glow/ombre derrière le badge pour détacher du fond */
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6), 0 0 10px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px); /* 👈 petit flou pour couper avec l'image */
+}
+
+.info-badge:hover,
+.info-badge:focus-visible {
+  outline: none;
+  border-color: var(--accent, #14d1ff);
+  box-shadow: 0 0 10px var(--accent, #14d1ff),
+    0 0 20px color-mix(in oklab, var(--accent, #14d1ff) 45%, transparent);
+}
+
+@media (max-width: 768px) {
+  /* Pas de hover sur mobile : on masque l’overlay et affiche le badge */
+  .character-card .card-hover {
+    display: none !important;
+  }
+  .info-badge {
+    display: block;
+  }
+}
+
+/* --- Modale (fond + panneau) --- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 6, 10, 0.55);
+  backdrop-filter: blur(2px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-panel {
+  width: min(92vw, 520px);
+  max-height: 80vh;
+  background: rgba(16, 20, 32, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: pop 0.14s ease-out;
+}
+
+@keyframes pop {
+  from {
+    transform: translateY(6px);
+    opacity: 0.85;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.modal-close {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #eaf0ff;
+  border-radius: 10px;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+.modal-close:hover,
+.modal-close:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 8px var(--accent),
+    0 0 16px color-mix(in oklab, var(--accent) 40%, transparent);
+}
+
+.modal-content {
+  padding: 14px;
+  color: color-mix(in oklab, #eaf0ff 90%, transparent);
+  line-height: 1.55;
+  overflow: auto;
+}
+
+.modal-foot {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 12px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* =============================================================================
+   ⏭️ PAGINATION (glow doux)
+   ============================================================================= */
+.cards-footer {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: #fff;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+  /* glow doux au repos */
+  box-shadow: 0 0 6px var(--accent),
+    0 0 12px color-mix(in oklab, var(--accent) 35%, transparent);
+}
+
+.btn-ghost:hover,
+.btn-ghost:focus-visible {
+  background: color-mix(in oklab, var(--accent) 12%, transparent);
+  box-shadow: 0 0 10px var(--accent),
+    0 0 20px color-mix(in oklab, var(--accent) 45%, transparent);
+  transform: translateY(-1px);
+}
+
+/* État désactivé */
+.btn-ghost:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: var(--muted, #99a3bc);
+}
+
+/* =============================================================================
+   🎨 UTILITAIRES
+   ============================================================================= */
+.muted {
+  color: var(--muted, #99a3bc);
+}
