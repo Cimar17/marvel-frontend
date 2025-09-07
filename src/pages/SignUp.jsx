@@ -37,8 +37,8 @@ const Signup = ({ setUser }) => {
       // ✅ On stocke le token reçu via setUser (App.jsx s’occupe du localStorage)
       setUser(data.token);
 
-      // 🚪 Redirection vers Characters
-      navigate("/characters");
+      // 🚪 Redirection vers Home
+      navigate("/");
     } catch (error) {
       // ❌ Gestion d’erreur simple (console)
       console.error("Erreur Signup:", error.response?.data || error.message);

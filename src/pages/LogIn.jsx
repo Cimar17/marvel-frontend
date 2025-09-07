@@ -47,8 +47,8 @@ const Login = ({ setUser }) => {
               // ✅ Connexion réussie → on stocke le token
               setUser(data.token);
 
-              // 🚪 On redirige vers Characters
-              navigate("/characters");
+              // 🚪 On redirige vers Home
+              navigate("/");
             } catch (error) {
               // ❌ Erreur simple (ex: mauvais mot de passe)
               console.error(

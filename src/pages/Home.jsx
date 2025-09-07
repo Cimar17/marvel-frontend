@@ -4,7 +4,7 @@
 // - Section HERO avec thème par défaut (Rocket)
 // - Image de fond + gradient sombre (lisibilité du texte)
 // - Titre + sous-titre dynamiques (selon le thème)
-// - Boutons CTA (Signup / Login)
+// - Boutons CTA (Signup / Login) ou Se déconnecter si connecté
 // - Indicateur de scroll (visuel Rocket en bas de l’écran)
 // =====================================================================================
 
@@ -21,7 +21,10 @@ const DEFAULT_THEME = {
   titleGlow: "0 0 24px rgba(20, 209, 255, .55)", // Effet lumineux sur le titre
 };
 
-const Home = ({ theme = DEFAULT_THEME }) => {
+// 🔁 Ajout de 2 props :
+// - userToken → savoir si l’utilisateur est connecté ou non
+// - onLogout  → fonction à appeler pour se déconnecter (supprime le token)
+const Home = ({ theme = DEFAULT_THEME, userToken, onLogout }) => {
   return (
     <main className="home">
       {/* ------------------------------------------------------------------
@@ -54,28 +57,39 @@ const Home = ({ theme = DEFAULT_THEME }) => {
           {/* 📝 Sous-titre / description */}
           <p className="hero-subtitle">{theme.description}</p>
 
-          {/* CTA (Call To Action) → liens de navigation */}
+          {/* CTA (Call To Action) → zone des boutons principaux */}
           <div className="cta-row">
-            <Link to="/signup" className="btn btn-gradient">
-              Signup
-            </Link>
-            <Link to="/login" className="btn btn-outline">
-              Login
-            </Link>
-          </div>
-        </div>
-
-        {/* ------------------------------------------------------------------
-            Indicateur de scroll (Rocket)
-            - Petit effet visuel en bas de la section
-            - Invite l’utilisateur à descendre
-           ------------------------------------------------------------------ */}
-        <div className="scroll-indicator rocket">
-          <div className="scroll-core" />
-          <div className="claws">
-            <span></span>
-            <span></span>
-            <span></span>
+            {userToken ? (
+              // ✅ Cas 1 : si userToken existe → l’utilisateur est connecté
+              // Donc on lui montre :
+              // - un bouton "Se déconnecter" (qui appelle onLogout quand on clique)
+              // - un raccourci direct vers la page "Personnages"
+              <>
+                <button
+                  type="button"
+                  className="btn btn-gradient"
+                  onClick={onLogout} // 🔴 quand on clique → déconnexion
+                >
+                  {" "}
+                  Se déconnecter
+                </button>
+                <Link to="/characters" className="btn btn-outline">
+                  {" "}
+                  Voir les personnages
+                </Link>
+              </>
+            ) : (
+              // ❌ Cas 2 : si userToken n’existe pas → utilisateur non connecté
+              // Donc on lui propose seulement de s’inscrire ou de se connecter
+              <>
+                <Link to="/signup" className="btn btn-gradient">
+                  Signup
+                </Link>
+                <Link to="/login" className="btn btn-outline">
+                  Login
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </section>

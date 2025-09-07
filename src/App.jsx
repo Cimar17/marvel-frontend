@@ -24,17 +24,26 @@ export default function App() {
   const [userToken, setUserToken] = useState(
     localStorage.getItem("MARVEL_TOKEN") || null
   );
+  const [userName, setUserName] = useState(
+    localStorage.getItem("MARVEL_USERNAME") || null
+  );
 
   // 🔑 Fonction pour connecter/déconnecter
-  const setUser = (t) => {
-    if (t) {
-      // ✅ Connexion : on stocke le token
-      setUserToken(t);
-      localStorage.setItem("MARVEL_TOKEN", t);
+
+  const setUser = (token, username = null) => {
+    if (token) {
+      setUserToken(token);
+      localStorage.setItem("MARVEL_TOKEN", token);
+
+      if (username) {
+        setUserName(username);
+        localStorage.setItem("MARVEL_USERNAME", username);
+      }
     } else {
-      // ❌ Déconnexion : on supprime le token
       setUserToken(null);
+      setUserName(null);
       localStorage.removeItem("MARVEL_TOKEN");
+      localStorage.removeItem("MARVEL_USERNAME");
     }
   };
 
@@ -75,13 +84,28 @@ export default function App() {
           (e) => setMousePosition({ x: e.clientX, y: e.clientY }) // 🖱️ suivi de la souris
         }
       >
-        {/* 🧱 Header commun → on lui donne le thème actuel + setter */}
-        <Header themeKey={themeKey} setThemeKey={handleThemeChange} />
+        {/* 🧱 Header commun → affiché sur toutes les pages */}
+        <Header
+          themeKey={themeKey} // 🎨 clé du thème courant (rocket / ironman / panther)
+          setThemeKey={handleThemeChange} // 🎛️ fonction pour changer de thème (modifie state + localStorage)
+          userName={userName} // 👤 nom de l’utilisateur (affiché si connecté)
+          onLogout={() => setUser(null)} // 🔓 action déconnexion (vide le token et le username du localStorage)
+        />
 
-        {/* 📚 Déclaration des routes */}
+        {/* 📚 Déclaration des routes avec React Router */}
         <Routes>
-          {/* Page d’accueil */}
-          <Route path="/" element={<Home theme={theme} />} />
+          {/* Page d’accueil ("/") */}
+          <Route
+            path="/"
+            element={
+              <Home
+                theme={theme} // 🎭 objet thème (couleurs, image, titre du hero)
+                userName={userName} // 👤 transmis pour affichage futur (badge / bienvenue)
+                userToken={userToken} // 🔑 permet à Home de savoir si l’utilisateur est connecté
+                onLogout={() => setUser(null)} // 🔓 bouton "Se déconnecter" visible seulement si connecté
+              />
+            }
+          />
           {/* Liste personnages */}
           <Route path="/characters" element={<Characters />} />
           {/* Comics d’un perso (page dynamique avec :id) */}
